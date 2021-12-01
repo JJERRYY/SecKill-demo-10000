@@ -12,7 +12,6 @@ public interface ProductOrderItemService {
     boolean add(ProductOrderItem productOrderItem);
     boolean update(ProductOrderItem productOrderItem);
     boolean deleteList(Integer[] productOrderItem_id_list);
-
     List<ProductOrderItem> getList(PageUtil pageUtil);
     List<ProductOrderItem> getListByOrderId(Integer order_id, PageUtil pageUtil);
     List<ProductOrderItem> getListByUserId(Integer user_id, PageUtil pageUtil);
