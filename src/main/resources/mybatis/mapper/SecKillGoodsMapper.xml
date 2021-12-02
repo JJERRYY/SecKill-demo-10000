@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xq.tmall.dao.SecKillGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.xq.tmall.entity.Product" >
+    <id property="product_id" column="product_id"/>
+    <result property="product_name" column="product_name"/>
+    <result property="product_title" column="product_title"/>
+    <result property="product_price" column="product_price"/>
+    <result property="product_sale_price" column="product_sale_price"/>
+    <result property="product_create_date" column="product_create_date"/>
+    <result property="product_isEnabled" column="product_isEnabled"/>
+    <result property="product_sale_count" column="product_sale_count"/>
+    <result property="product_review_count" column="product_review_count"/>
+    <result property="product_start_time" column="product_start_time"/>
+    <result property="product_end_time" column="product_end_time"/>
+    <result property="product_keep_sum" column="product_keep_sum"/>
+    <result property="product_real_sum" column="product_real_sum"/>
+    <association property="product_category" javaType="com.xq.tmall.entity.Category">
+      <id property="category_id" column="product_category_id"/>
+    </association>
+  </resultMap>
+  <select id="selectSecKillGoods" resultMap="BaseResultMap">
+    SELECT
+    product_id,
+    product_name,
+    product_title,
+    product_price,
+    product_sale_price,
+    product_create_date,
+    product_start_time,
+    product_end_time,
+    product_keep_sum,
+    product_real_sum,
+    product_isEnabled,
+    product_category_id,
+    product_sale_count,
+    product_review_count
+    FROM product
+    <where>
+      <if test="product_start_time != null">
+        <if test="product_end_time != null">
+
+        </if>
+      </if>
+    </where>
+  </select>
+</mapper>
