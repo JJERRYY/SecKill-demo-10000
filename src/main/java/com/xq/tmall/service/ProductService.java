@@ -9,6 +9,7 @@ import java.util.List;
 public interface ProductService {
     boolean add(Product product);
     boolean update(Product product);
+    List<Product> getSeckillGoodsList();
 
     List<Product> getList(Product product, Byte[] product_isEnabled_array, OrderUtil orderUtil, PageUtil pageUtil);
 
@@ -19,4 +20,7 @@ public interface ProductService {
     List<Product> getMoreList(Product product, Byte[] bytes, OrderUtil orderUtil, PageUtil pageUtil, String[] product_name_split);
 
     Integer getMoreListTotal(Product product, Byte[] bytes, String[] product_name_split);
+
+
+    Product getseckillGoodsBoByGoodsId(Integer product_id);
 }

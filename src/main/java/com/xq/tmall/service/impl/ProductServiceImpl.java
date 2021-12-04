@@ -15,6 +15,11 @@ import java.util.List;
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
 
+    @Override
+    public List<Product> getSeckillGoodsList() {
+        return productMapper.selectAllGoodes();
+    }
+
     private ProductMapper productMapper;
     @Resource(name = "productMapper")
     public void setProductMapper(ProductMapper productMapper) {
@@ -65,4 +70,8 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.selectMoreListTotal(product, bytes, product_name_split);
     }
 
+    @Override
+    public Product getseckillGoodsBoByGoodsId(Integer product_id) {
+        return productMapper.getseckillGoodsBoByGoodsId(product_id);
+    }
 }

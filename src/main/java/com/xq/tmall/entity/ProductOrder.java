@@ -22,6 +22,7 @@ public class ProductOrder {
     private Date productOrder_confirm_date/*订单确认日期*/;
     private Byte productOrder_status/*订单状态*/;
     private User productOrder_user/*订单对应用户*/;
+    private Product productOrder_product/*订单对于货物*/;
     private List<ProductOrderItem> productOrderItemList/*订单项集合*/;
 
     @Override
@@ -39,6 +40,7 @@ public class ProductOrder {
                 ", productOrder_confirm_date=" + productOrder_confirm_date +
                 ", productOrder_status=" + productOrder_status +
                 ", productOrder_user=" + productOrder_user +
+                ",productOrder_product"+productOrder_product+
                 ", productOrderItemList=" + productOrderItemList +
                 '}';
     }
@@ -46,7 +48,7 @@ public class ProductOrder {
     public ProductOrder() {
     }
 
-    public ProductOrder(Integer productOrder_id, String productOrder_code, Address productOrder_address, String productOrder_detail_address, String productOrder_post, String productOrder_receiver, String productOrder_mobile, Date productOrder_pay_date, Byte productOrder_status, User productOrder_user) {
+    public ProductOrder(Integer productOrder_id, String productOrder_code, Address productOrder_address, String productOrder_detail_address, String productOrder_post, String productOrder_receiver, String productOrder_mobile, Date productOrder_pay_date, Byte productOrder_status, User productOrder_user,Product productOrder_product) {
         this.productOrder_id = productOrder_id;
         this.productOrder_code = productOrder_code;
         this.productOrder_address = productOrder_address;
@@ -57,9 +59,11 @@ public class ProductOrder {
         this.productOrder_pay_date = productOrder_pay_date;
         this.productOrder_status = productOrder_status;
         this.productOrder_user = productOrder_user;
+        this.productOrder_product=productOrder_product;
+        this.productOrder_id = productOrder_id;
     }
 
-    public ProductOrder(Integer productOrder_id, String productOrder_code, Address productOrder_address, String productOrder_detail_address, String productOrder_post, String productOrder_receiver, String productOrder_mobile, Date productOrder_pay_date, Date productOrder_delivery_date, Date productOrder_confirm_date, Byte productOrder_status, User productOrder_user, List<ProductOrderItem> productOrderItemList) {
+    public ProductOrder(Integer productOrder_id, String productOrder_code, Address productOrder_address, String productOrder_detail_address, String productOrder_post, String productOrder_receiver, String productOrder_mobile, Date productOrder_pay_date, Date productOrder_delivery_date, Date productOrder_confirm_date, Byte productOrder_status, User productOrder_user, Product productOrder_product,List<ProductOrderItem> productOrderItemList) {
         this.productOrder_id = productOrder_id;
         this.productOrder_code = productOrder_code;
         this.productOrder_address = productOrder_address;
@@ -72,6 +76,7 @@ public class ProductOrder {
         this.productOrder_confirm_date = productOrder_confirm_date;
         this.productOrder_status = productOrder_status;
         this.productOrder_user = productOrder_user;
+        this.productOrder_product=productOrder_product;
         this.productOrderItemList = productOrderItemList;
     }
 
@@ -192,6 +197,15 @@ public class ProductOrder {
 
     public ProductOrder setProductOrder_user(User productOrder_user) {
         this.productOrder_user = productOrder_user;
+        return this;
+    }
+
+    public Product getProductOrder_product() {
+        return productOrder_product;
+    }
+
+    public ProductOrder setProductOrder_product(Product productOrder_product) {
+        this.productOrder_product = productOrder_product;
         return this;
     }
 

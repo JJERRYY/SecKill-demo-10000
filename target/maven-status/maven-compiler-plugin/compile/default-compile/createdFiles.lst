@@ -2,6 +2,7 @@ com\xq\tmall\service\impl\PropertyServiceImpl.class
 com\xq\tmall\entity\Address.class
 com\xq\tmall\controller\admin\AdminLoginController.class
 com\xq\tmall\util\PageUtil.class
+com\xq\tmall\result\Result.class
 com\xq\tmall\controller\admin\UserController.class
 com\xq\tmall\service\impl\ProductOrderItemServiceImpl.class
 com\xq\tmall\redis\KeyPrefix.class
@@ -10,18 +11,22 @@ com\xq\tmall\service\impl\AdminServiceImpl.class
 com\xq\tmall\controller\admin\OrderController.class
 com\xq\tmall\service\UserService.class
 com\xq\tmall\service\ReviewService.class
+com\xq\tmall\util\CookieUtil.class
 com\xq\tmall\util\OrderUtil.class
+com\xq\tmall\common\Const.class
 com\xq\tmall\service\AddressService.class
 com\xq\tmall\filter\AdminPermissionFilter.class
 com\xq\tmall\service\impl\ProductOrderServiceImpl.class
 com\xq\tmall\controller\admin\ProductController.class
 com\xq\tmall\entity\PropertyValue.class
 com\xq\tmall\entity\Reward.class
+com\xq\tmall\dao\SecKillGoodsMapper.class
 com\xq\tmall\redis\RedisConfig.class
 com\xq\tmall\dao\CategoryMapper.class
 com\xq\tmall\dao\PropertyMapper.class
 com\xq\tmall\service\ProductOrderService.class
 com\xq\tmall\controller\fore\ForeProductListController.class
+com\xq\tmall\util\MD5Util.class
 com\xq\tmall\service\AdminService.class
 com\xq\tmall\dao\AddressMapper.class
 com\xq\tmall\controller\fore\ForeProductDetailsController.class
@@ -49,6 +54,7 @@ com\xq\tmall\controller\BaseController.class
 com\xq\tmall\controller\admin\AdminHomeController.class
 com\xq\tmall\service\PropertyValueService.class
 com\xq\tmall\controller\fore\ForeUserController.class
+com\xq\tmall\controller\SecKillController.class
 com\xq\tmall\service\impl\ProductImageServiceImpl.class
 com\xq\tmall\dao\ProductOrderMapper.class
 com\xq\tmall\controller\admin\CategoryController.class
@@ -60,6 +66,7 @@ com\xq\tmall\service\impl\AddressServiceImpl.class
 com\xq\tmall\entity\Property.class
 com\xq\tmall\TmallSpringBootApplication.class
 com\xq\tmall\service\impl\PropertyValueServiceImpl.class
+com\xq\tmall\result\CodeMsg.class
 com\xq\tmall\controller\fore\ForeOrderController.class
 com\xq\tmall\entity\OrderGroup.class
 com\xq\tmall\service\CategoryService.class
@@ -74,7 +81,9 @@ com\xq\tmall\entity\Admin.class
 com\xq\tmall\controller\fore\ForeAddressController.class
 com\xq\tmall\entity\ProductOrder.class
 com\xq\tmall\entity\User.class
+com\xq\tmall\annotations\AccessLimit.class
 com\xq\tmall\dao\ProductMapper.class
+com\xq\tmall\common\Const$RedisCacheExtime.class
 com\xq\tmall\dao\UserMapper.class
 com\xq\tmall\service\impl\CategoryServiceImpl.class
 com\xq\tmall\dao\ProductOrderItemMapper.class
