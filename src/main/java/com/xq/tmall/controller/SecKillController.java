@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.xq.tmall.result.CodeMsg;
 import com.xq.tmall.result.Result;
+import com.xq.tmall.message.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -76,11 +77,13 @@ public class SecKillController implements InitializingBean {
             model.addAttribute("errmsg", CodeMsg.MIAO_SHA_OVER.getMsg());
             return "redirect:/miaosha_fail";
         }
+
         //判断是否已经秒杀到了
 
-//          SeckillOrder order = seckillOrderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
+
 
         ProductOrder order = productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),goods.getProduct_id());
+
         if (order != null) {
             model.addAttribute("errmsg", CodeMsg.REPEATE_MIAOSHA.getMsg());
             return "redirect:/miaosha_fail";
@@ -131,6 +134,10 @@ public class SecKillController implements InitializingBean {
             return Result.error(CodeMsg.REPEATE_MIAOSHA);
         }
         else {return null;}
+
+         Order order1;
+
+         order1.setOrderId( String.valueOf(order.getProductOrder_id());
 //        入队
 //        SeckillMessage mm = new SeckillMessage();
 //        mm.setUser(user);
