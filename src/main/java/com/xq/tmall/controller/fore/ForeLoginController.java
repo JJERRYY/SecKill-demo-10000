@@ -3,7 +3,11 @@ package com.xq.tmall.controller.fore;
 import com.alibaba.fastjson.JSONObject;
 import com.xq.tmall.controller.BaseController;
 import com.xq.tmall.entity.User;
+import com.xq.tmall.producer.OrderUnpaidProducer;
 import com.xq.tmall.service.UserService;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,11 +26,28 @@ import java.util.Map;
 public class ForeLoginController extends BaseController {
     @Resource(name = "userService")
     private UserService userService;
-
+    
+    @Autowired
+    OrderUnpaidProducer producer ;
     //转到前台天猫-登录页
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String goToPage(HttpSession session, Map<String, Object> map) {
         logger.info("转到前台天猫-登录页");
+
+
+        producer.asyncSend("test", 3,new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", "test", sendResult);
+
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", "test", e);
+
+            }
+        });
         return "fore/loginPage";
     }
 

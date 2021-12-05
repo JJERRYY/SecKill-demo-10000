@@ -1,0 +1,9 @@
+Java HotSpot(TM) 64-Bit Server VM warning: Using the DefNew young collector with the CMS collector is deprecated and will likely be removed in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: UseCMSCompactAtFullCollection is deprecated and will likely be removed in a future release.
+The Name Server boot success. serializeType=JSON
+The broker[jerrydeMBP, 192.168.123.113:10911] boot success. serializeType=JSON and name server is localhost:9876
+Create RAMDisk /Volumes/RAMDisk for gc logging on Darwin OS.
+Java HotSpot(TM) 64-Bit Server VM warning: Using the DefNew young collector with the CMS collector is deprecated and will likely be removed in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: UseCMSCompactAtFullCollection is deprecated and will likely be removed in a future release.
+The Name Server boot success. serializeType=JSON
+The broker[jerrydeMBP, 192.168.123.113:10911] boot success. serializeType=JSON and name server is localhost:9876

@@ -38,6 +38,7 @@ public class SecKillController implements InitializingBean {
     @Autowired
     ProductOrderService productOrderService;
 
+
 //    @Autowired
 ////    MQSender mqSender;
 
