@@ -32,10 +32,11 @@ public class UnpaidMessageConsumer implements RocketMQListener<Order> {
     public void onMessage(Order order) {
         //触发监听之后去查根据Order.orderId的订单编号去数据库/Redis缓存里查是否付款,没付款取消订单
         logger.info("延迟消息[onMessage][线程编号:{} 消息内容：{}]", Thread.currentThread().getId(), order);
-        if (productOrderService.get(Integer.valueOf(order.getOrderId())).getProductOrder_status()==1) {
+        if (productOrderService.get(Integer.valueOf(order.getOrderId())).getProductOrder_status()==0){
             productOrderService.deleteList(new Integer[]{Integer.valueOf(order.getOrderId())});
 
-            long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + Integer.valueOf(order.getOrderId()));
+            long stock = redisService.incr(GoodsKey.getSeckillGoodsStock, "" + Integer.valueOf(order.getOrderId()));
+
         }
 
 
