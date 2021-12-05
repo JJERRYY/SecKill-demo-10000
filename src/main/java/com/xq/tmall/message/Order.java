@@ -1,9 +1,6 @@
 package com.xq.tmall.message;
 
-import org.apache.rocketmq.common.message.Message;
-
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 public class Order implements Serializable {
 
@@ -11,8 +8,8 @@ public class Order implements Serializable {
     }
 
     public static final String TOPIC = "Unpaid";
-    private String orderId;//订单编号
-    public Order( String orderId) {
+    private Integer orderId;//订单编号
+    public Order(Integer orderId) {
         this.orderId =orderId;
     }
 
@@ -20,7 +17,7 @@ public class Order implements Serializable {
         return TOPIC;
     }
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
@@ -31,7 +28,7 @@ public class Order implements Serializable {
     @Override
     public String toString() {
         return "Order{" +
-                "OrderId=" + orderId +
+                "orderId=" + orderId +
                 '}';
     }
 }

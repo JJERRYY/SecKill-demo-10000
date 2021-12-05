@@ -26,28 +26,26 @@ import java.util.Map;
 public class ForeLoginController extends BaseController {
     @Resource(name = "userService")
     private UserService userService;
-    
+
     @Autowired
     OrderUnpaidProducer producer ;
     //转到前台天猫-登录页
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String goToPage(HttpSession session, Map<String, Object> map) {
         logger.info("转到前台天猫-登录页");
-
-
-        producer.asyncSend("test", 3,new SendCallback() {
-            @Override
-            public void onSuccess(SendResult sendResult) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", "test", sendResult);
-
-            }
-
-            @Override
-            public void onException(Throwable e) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", "test", e);
-
-            }
-        });
+//        producer.asyncSend(12384, 3,new SendCallback() {
+//            @Override
+//            public void onSuccess(SendResult sendResult) {
+//                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", "test", sendResult);
+//
+//            }
+//
+//            @Override
+//            public void onException(Throwable e) {
+//                logger.info("[testASyncSend][发送编号：[{}] 发送异常]]", "test", e);
+//
+//            }
+//        });
         return "fore/loginPage";
     }
 

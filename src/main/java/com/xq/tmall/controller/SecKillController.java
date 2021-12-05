@@ -5,12 +5,17 @@ import com.xq.tmall.common.Const;
 import com.xq.tmall.entity.Product;
 import com.xq.tmall.entity.ProductOrder;
 import com.xq.tmall.entity.User;
+import com.xq.tmall.producer.OrderUnpaidProducer;
 import com.xq.tmall.redis.GoodsKey;
 import com.xq.tmall.redis.UserKey;
 import com.xq.tmall.service.ProductService;
 import com.xq.tmall.util.CookieUtil;
 import com.xq.tmall.redis.RedisService;
 import com.xq.tmall.service.ProductOrderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +43,10 @@ public class SecKillController implements InitializingBean {
 
     @Autowired
     ProductOrderService productOrderService;
+    @Autowired
+    OrderUnpaidProducer orderUnpaidProducer;
 
+    protected Logger logger = LogManager.getLogger(SecKillController.class);
 
 //    @Autowired
 ////    MQSender mqSender;
@@ -133,11 +141,20 @@ public class SecKillController implements InitializingBean {
         if (order != null) {
             return Result.error(CodeMsg.REPEATE_MIAOSHA);
         }
-        else {return null;}
 
-         Order order1;
+        Integer orderId = order.getProductOrder_id();
 
-         order1.setOrderId( String.valueOf(order.getProductOrder_id());
+        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
+            }
+            @Override
+            public void onException(Throwable e) {
+                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
+            }
+        });
+        return Result.success(orderId);
 //        入队
 //        SeckillMessage mm = new SeckillMessage();
 //        mm.setUser(user);

@@ -17,7 +17,7 @@ public class OrderUnpaidProducer {
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
-    public void asyncSend(String id, int delayLevel,SendCallback callback) {
+    public void asyncSend(Integer id, int delayLevel,  SendCallback callback) {
 
 
         Message message = MessageBuilder.withPayload(new Order(id)).build();
