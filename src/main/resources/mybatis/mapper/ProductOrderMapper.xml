@@ -40,7 +40,7 @@
             #{productOrder.productOrder_confirm_date},
             #{productOrder.productOrder_status},
         #{productOrder.productOrder_address.address_areaId},
-        #{productOrder.productOrder_user.user_id})
+        #{productOrder.productOrder_user.user_id},
         #{productOrder.productOrder_product.product_id})
     </insert>
     <update id="updateOne" parameterType="productOrder">
