@@ -2,14 +2,26 @@ package com.xq.tmall.controller.fore;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xq.tmall.annotations.AccessLimit;
+import com.xq.tmall.common.Const;
 import com.xq.tmall.controller.BaseController;
 import com.xq.tmall.entity.*;
+import com.xq.tmall.producer.OrderUnpaidProducer;
+import com.xq.tmall.redis.GoodsKey;
+import com.xq.tmall.redis.UserKey;
+import com.xq.tmall.result.CodeMsg;
+import com.xq.tmall.result.Result;
 import com.xq.tmall.service.*;
+import com.xq.tmall.result.Result;
+import com.xq.tmall.util.CookieUtil;
 import com.xq.tmall.util.OrderUtil;
 import com.xq.tmall.util.PageUtil;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import com.xq.tmall.redis.RedisService;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +32,23 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.springframework.ui.Model;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import com.xq.tmall.result.CodeMsg;
+import com.xq.tmall.result.Result;
+import com.xq.tmall.message.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
 /**
  * 订单列表页
  * @author 贤趣项目小组
@@ -45,6 +73,29 @@ public class ForeOrderController extends BaseController {
     private ReviewService reviewService;
     @Resource(name = "lastIDService")
     private LastIDService lastIDService;
+    @Autowired
+    RedisService redisService;
+    @Autowired
+    OrderUnpaidProducer orderUnpaidProducer;
+
+
+    private HashMap<Integer, Boolean> localOverMap = new HashMap<Integer, Boolean>();
+
+
+    /**
+     * 系统初始化
+     */
+    public void afterPropertiesSet() throws Exception {
+        List<Product> goodsList = productService.getSeckillGoodsList();
+        if (goodsList == null) {
+            return;
+        }
+        for (Product goods : goodsList) {
+            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_real_sum(), Const.RedisCacheExtime.GOODS_LIST);
+            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
+        }
+    }
+
 
     //转到前台天猫-订单列表页
     @RequestMapping(value = "order", method = RequestMethod.GET)
@@ -124,19 +175,40 @@ public class ForeOrderController extends BaseController {
     @RequestMapping(value = "order/create/{product_id}", method = RequestMethod.GET)
     public String goToOrderConfirmPage(@PathVariable("product_id") Integer product_id,
                                        @RequestParam(required = false, defaultValue = "1") Short product_number,
+
                                        Map<String, Object> map,
+                                       Model model,
                                        HttpSession session,
                                        HttpServletRequest request) throws UnsupportedEncodingException {
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
-        if (userId != null) {
+
+        if (userId!= null) {
             logger.info("获取用户信息");
             user = userService.get(Integer.parseInt(userId.toString()));
             map.put("user", user);
         } else {
             return "redirect:/login";
         }
+        ProductOrder order=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product_id);
+        Integer orderId = order.getProductOrder_id();
+        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
+            }
+            @Override
+            public void onException(Throwable e) {
+                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
+            }
+        });
+        //预减库存
+        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product_id);//10
+        if (stock < 0) {
+            localOverMap.put(product_id, true);
+        }
+
         logger.info("通过产品ID获取产品信息：{}", product_id);
         Product product = productService.get(product_id);
         if (product == null) {
@@ -151,7 +223,7 @@ public class ForeOrderController extends BaseController {
         productOrderItem.setProductOrderItem_product(product);
         productOrderItem.setProductOrderItem_number(product_number);
         productOrderItem.setProductOrderItem_price(product.getProduct_sale_price() * product_number);
-        productOrderItem.setProductOrderItem_user(new User().setUser_id(Integer.valueOf(userId.toString())));
+        productOrderItem.setProductOrderItem_user(new User().setUser_id(Integer.valueOf(user.getUser_id().toString())));
 
         //初始化订单地址信息
         String addressId = "110000";
@@ -1171,4 +1243,7 @@ public class ForeOrderController extends BaseController {
         }
         return object.toJSONString();
     }
+
+
+
 }

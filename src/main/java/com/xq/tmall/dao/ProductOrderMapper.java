@@ -14,8 +14,8 @@ import java.util.List;
 
 @Mapper
 public interface ProductOrderMapper {
-    ProductOrder selectByUserIdAndGoodsId(@Param("productOrder_user_id") Integer productOrder_user_id, @Param("productOrder_product_id") Integer productOrder_product_id);
-    Integer insert(ProductOrder record);
+    ProductOrder selectByUserIdAndGoodsId(@Param("productOrder_user_id") Integer productOrder_user, @Param("productOrder_product_id") Integer productOrder_product_id);
+//    Integer insert(ProductOrder record);
     Integer insertOne(@Param("productOrder") ProductOrder productOrder);
     Integer updateOne(@Param("productOrder") ProductOrder productOrder);
     Integer deleteList(@Param("productOrder_id_list") Integer[] productOrder_id_list);
