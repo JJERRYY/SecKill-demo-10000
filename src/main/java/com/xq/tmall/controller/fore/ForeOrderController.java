@@ -979,8 +979,10 @@ public class ForeOrderController extends BaseController {
         //预减库存
         long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id());//10
         if (stock < 0) {
-            logger.info("库存为0，秒杀失败");
+            logger.info("库存为0，秒杀失败！跳转");
             localOverMap.put(product.getProduct_id(), true);
+            //跳转
+//            return ;
         }
 
         logger.info("将收货地址等相关信息存入Cookie中,便于下次使用");
@@ -1036,18 +1038,19 @@ public class ForeOrderController extends BaseController {
 
         object.put("success", true);
         object.put("url", "/order/pay/" + productOrder.getProductOrder_code());
+//        User user = userService.get(Integer.parseInt(userId.toString()));
+//        ProductOrder order1=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product.getProduct_id());
+//        Integer orderId = order1.getProductOrder_id();
 
-        User user = userService.get(Integer.parseInt(userId.toString()));
-        ProductOrder order1=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product.getProduct_id());
-        Integer orderId = order1.getProductOrder_id();
-        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
+
+        orderUnpaidProducer.asyncSend(order_id, 3, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
+                logger.info("订单{}异步入队列，结果{}", order_id, sendResult);
             }
             @Override
             public void onException(Throwable e) {
-                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
+                logger.info("订单{}异步入队列，发送异常]",order_id , e);
             }
         });
         return object.toJSONString();
