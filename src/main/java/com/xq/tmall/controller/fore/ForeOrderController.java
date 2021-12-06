@@ -191,23 +191,7 @@ public class ForeOrderController extends BaseController {
         } else {
             return "redirect:/login";
         }
-        ProductOrder order=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product_id);
-        Integer orderId = order.getProductOrder_id();
-        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
-            @Override
-            public void onSuccess(SendResult sendResult) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
-            }
-            @Override
-            public void onException(Throwable e) {
-                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
-            }
-        });
-        //预减库存
-        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product_id);//10
-        if (stock < 0) {
-            localOverMap.put(product_id, true);
-        }
+
 
         logger.info("通过产品ID获取产品信息：{}", product_id);
         Product product = productService.get(product_id);
@@ -460,6 +444,7 @@ public class ForeOrderController extends BaseController {
     //转到前台天猫-订单支付成功页
     @RequestMapping(value = "order/pay/success/{order_code}", method = RequestMethod.GET)
     public String goToOrderPaySuccessPage(Map<String, Object> map, HttpSession session,
+                                          @PathVariable("product_id") Integer product_id,
                                           @PathVariable("order_code") String order_code) {
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
@@ -470,6 +455,23 @@ public class ForeOrderController extends BaseController {
             map.put("user", user);
         } else {
             return "redirect:/login";
+        }
+        ProductOrder order1=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product_id);
+        Integer orderId = order1.getProductOrder_id();
+        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
+            }
+            @Override
+            public void onException(Throwable e) {
+                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
+            }
+        });
+        //预减库存
+        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product_id);//10
+        if (stock < 0) {
+            localOverMap.put(product_id, true);
         }
         logger.info("------验证订单信息------");
         logger.info("查询订单是否存在");
