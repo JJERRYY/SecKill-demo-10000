@@ -192,23 +192,7 @@ public class ForeOrderController extends BaseController {
             return "redirect:/login";
         }
 
-        ProductOrder order1=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product_id);
-        Integer orderId = order1.getProductOrder_id();
-        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
-            @Override
-            public void onSuccess(SendResult sendResult) {
-                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
-            }
-            @Override
-            public void onException(Throwable e) {
-                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
-            }
-        });
-        //预减库存
-        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product_id);//10
-        if (stock < 0) {
-            localOverMap.put(product_id, true);
-        }
+
 
         logger.info("通过产品ID获取产品信息：{}", product_id);
         Product product = productService.get(product_id);
@@ -992,6 +976,13 @@ public class ForeOrderController extends BaseController {
             object.put("url", "/");
             return object.toJSONString();
         }
+        //预减库存
+        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id());//10
+        if (stock < 0) {
+            logger.info("库存为0，秒杀失败");
+            localOverMap.put(product.getProduct_id(), true);
+        }
+
         logger.info("将收货地址等相关信息存入Cookie中,便于下次使用");
         Cookie[] cookies = new Cookie[]{
                 new Cookie("addressId", addressId),
@@ -1045,6 +1036,20 @@ public class ForeOrderController extends BaseController {
 
         object.put("success", true);
         object.put("url", "/order/pay/" + productOrder.getProductOrder_code());
+
+        User user = userService.get(Integer.parseInt(userId.toString()));
+        ProductOrder order1=productOrderService.getSeckillOrderByUserIdGoodsId(user.getUser_id(),product.getProduct_id());
+        Integer orderId = order1.getProductOrder_id();
+        orderUnpaidProducer.asyncSend(orderId, 3, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                logger.info("[testASyncSend][发送编号：[{}] 发送成功，结果为：[{}]]", orderId, sendResult);
+            }
+            @Override
+            public void onException(Throwable e) {
+                logger.info("[ASyncSend][发送编号：[{}] 发送异常]]",orderId , e);
+            }
+        });
         return object.toJSONString();
     }
 
