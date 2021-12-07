@@ -985,13 +985,16 @@ public class ForeOrderController extends BaseController {
         }
         //预减库存
         long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id());//10
-        if (stock == 0) {
+        if (stock < 0) {
             logger.info("库存为0，秒杀失败！跳转");
             localOverMap.put(product.getProduct_id(), true);
             //跳转
+//            return "redirect:/";
+        }
+        Integer product_keep_sum1=redisService.get(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id(),int.class);
+        if(product_keep_sum1==0)
+        {
             return "redirect:/";
-
-
         }
 
         logger.info("将收货地址等相关信息存入Cookie中,便于下次使用");
