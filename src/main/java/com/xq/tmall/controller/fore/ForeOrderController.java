@@ -91,9 +91,15 @@ public class ForeOrderController extends BaseController {
             return;
         }
         for (Product goods : goodsList) {
-            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_real_sum(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
             localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
         }
+
+//        for (ProductOrder productOrder){
+//            redisService.set()
+//
+//        }
+
     }
 
 
@@ -129,6 +135,7 @@ public class ForeOrderController extends BaseController {
                         new User().setUser_id(Integer.valueOf(userId.toString()))
                 ), status_array, new OrderUtil("productOrder_id", true), pageUtil
         );
+
 
         //订单总数量
         Integer orderCount = 0;
@@ -978,11 +985,13 @@ public class ForeOrderController extends BaseController {
         }
         //预减库存
         long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id());//10
-        if (stock < 0) {
+        if (stock == 0) {
             logger.info("库存为0，秒杀失败！跳转");
             localOverMap.put(product.getProduct_id(), true);
             //跳转
-//            return ;
+            return "redirect:/";
+
+
         }
 
         logger.info("将收货地址等相关信息存入Cookie中,便于下次使用");
@@ -1035,6 +1044,7 @@ public class ForeOrderController extends BaseController {
         if (!yn) {
             throw new RuntimeException();
         }
+
 
         object.put("success", true);
         object.put("url", "/order/pay/" + productOrder.getProductOrder_code());
