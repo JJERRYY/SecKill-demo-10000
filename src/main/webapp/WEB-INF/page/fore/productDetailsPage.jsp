@@ -157,10 +157,7 @@
                          class="amount_value-down">
                 </span>
                  <span class="amount_unit">件</span>
-                 <span class="goods_price"><em>${requestScope.product.product_keep_sum}库存<em></span>
-                 <span class="goods_price">${requestScope.product.product_real_sum}当前库存</span>
-
-
+                 <span class="goods_price"><em>${mee}库存<em></span>
             </dd>
         </dl>
 

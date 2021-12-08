@@ -95,6 +95,7 @@ public class ForeOrderController extends BaseController {
             localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
         }
 
+
 //        for (ProductOrder productOrder){
 //            redisService.set()
 //
@@ -279,7 +280,8 @@ public class ForeOrderController extends BaseController {
         map.put("order_receiver", order_receiver);
         map.put("order_phone", order_phone);
         map.put("detailsAddress", detailsAddress);
-
+        Integer product_keep_sum1=redisService.get(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id(),int.class);
+        map.put("mee",product_keep_sum1);
         logger.info("转到前台天猫-订单建立页");
         return "fore/productBuyPage";
     }
@@ -722,8 +724,8 @@ public class ForeOrderController extends BaseController {
             logger.info("更新产品销量信息");
             Product updateProduct = new Product()
                     .setProduct_id(product.getProduct_id())
-                    .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number())
-                    .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
+                    .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number());
+//                    .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
             logger.info("更新产品信息，产品ID值为：{}", product.getProduct_id());
             boolean yn = productService.update(updateProduct);
             if (!yn) {
@@ -738,8 +740,8 @@ public class ForeOrderController extends BaseController {
                 logger.info("更新产品销量信息");
                 Product updateProduct = new Product()
                         .setProduct_id(product.getProduct_id())
-                        .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number())
-                        .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
+                        .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number());
+//                        .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
                 logger.info("更新产品信息，产品ID值为：{}", product.getProduct_id());
                 boolean yn = productService.update(updateProduct);
                 if (!yn) {
@@ -761,7 +763,8 @@ public class ForeOrderController extends BaseController {
         boolean yn = productOrderService.update(productOrder);
         if (yn) {
             object.put("success", true);
-            object.put("url", "/order/pay/success/" + order_code);
+//            object.put("url", "/order/pay/success/" + order_code);
+            object.put("url", "/order/0/10");
         } else {
             object.put("success", false);
             object.put("url", "/order/0/10");
@@ -996,6 +999,7 @@ public class ForeOrderController extends BaseController {
         {
             return "redirect:/";
         }
+//        map.put("mee",product_keep_sum1);
 
         logger.info("将收货地址等相关信息存入Cookie中,便于下次使用");
         Cookie[] cookies = new Cookie[]{
@@ -1177,6 +1181,7 @@ public class ForeOrderController extends BaseController {
     public String createOrderItem(@PathVariable("product_id") Integer product_id,
                                   @RequestParam(required = false, defaultValue = "1") Short product_number,
                                   HttpSession session,
+                                  Map<String, Object> map,
                                   HttpServletRequest request) {
         JSONObject object = new JSONObject();
         logger.info("检查用户是否登录");
@@ -1226,6 +1231,7 @@ public class ForeOrderController extends BaseController {
         } else {
             object.put("success", false);
         }
+
         return object.toJSONString();
     }
 

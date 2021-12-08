@@ -167,6 +167,13 @@
             var orderItem_number = parseInt('${requestScope.orderItemList[0].productOrderItem_number}');
 
             var yn = true;
+
+            var me="${mee}"
+            if(me==0){
+            alert('秒杀失败，商品卖完了');
+            window.navigate("http://www.baidu.com");
+            }
+
             if (productOrder_detail_address === "") {
                 styleUtil.specialBasicErrorShow($("#label_details_address"));
                 yn = false;

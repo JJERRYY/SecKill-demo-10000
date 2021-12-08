@@ -30,7 +30,7 @@ public class Product {
     private Date product_start_time/*秒杀开始日期*/;
     private Date product_end_time/*秒杀结束日期*/;
     private Integer product_keep_sum/*秒杀库存*/;
-    private Integer product_real_sum/*秒杀减去未付款的库存*/;
+//    private Integer product_real_sum/*秒杀减去未付款的库存*/;
 
     @Override
     public String toString() {
@@ -53,7 +53,7 @@ public class Product {
                 ", product_start_time=" + product_start_time +
                 ", product_end_time=" + product_end_time +
                 ", product_keep_sum=" + product_keep_sum +
-                ",product_real_sum" +product_real_sum+
+//                ",product_real_sum" +product_real_sum+
                 '}';
     }
 
@@ -69,7 +69,7 @@ public class Product {
         this.product_isEnabled = product_isEnabled;
         this.product_start_time=product_start_time;
         this.product_end_time=product_end_time;
-        this.product_real_sum=product_real_sum;
+//        this.product_real_sum=product_real_sum;
 
 
     }
@@ -94,7 +94,7 @@ public class Product {
         this.productOrderItemList = productOrderItemList;
         this.product_sale_count = product_sale_count;
         this.product_review_count = product_review_count;
-        this.product_real_sum=product_real_sum;
+//        this.product_real_sum=product_real_sum;
 
     }
 
@@ -281,14 +281,14 @@ public class Product {
         return this;
     }
 
-    public Integer getProduct_real_sum() {
-        return product_real_sum;
-    }
-
-    public Product setProduct_real_sum(Integer product_real_sum) {
-        this.product_real_sum = product_real_sum;
-        return this;
-    }
+//    public Integer getProduct_real_sum() {
+//        return product_real_sum;
+//    }
+//
+//    public Product setProduct_real_sum(Integer product_real_sum) {
+//        this.product_real_sum = product_real_sum;
+//        return this;
+//    }
 
 
 

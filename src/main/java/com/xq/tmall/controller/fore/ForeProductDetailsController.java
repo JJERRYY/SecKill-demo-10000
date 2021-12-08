@@ -5,12 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xq.tmall.controller.BaseController;
 import com.xq.tmall.entity.*;
+import com.xq.tmall.redis.GoodsKey;
+import com.xq.tmall.redis.RedisService;
 import com.xq.tmall.service.*;
 import com.xq.tmall.service.impl.ProductServiceImpl;
 import com.xq.tmall.util.PageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import com.xq.tmall.common.Const;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -40,7 +43,23 @@ public class ForeProductDetailsController extends BaseController {
     private ReviewService reviewService;
     @Resource(name = "productOrderItemService")
     private ProductOrderItemService productOrderItemService;
+    @Autowired
+    RedisService redisService;
 
+//    private HashMap<Integer, Boolean> localOverMap = new HashMap<Integer, Boolean>();
+    /**
+     * 系统初始化
+     */
+//    public void afterPropertiesSet() throws Exception {
+//        List<Product> goodsList = productService.getSeckillGoodsList();
+//        if (goodsList == null) {
+//            return;
+//        }
+//        for (Product goods : goodsList) {
+//            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
+//            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
+//        }
+//    }
     //转到前台天猫-产品详情页
     @RequestMapping(value = "product/{pid}", method = RequestMethod.GET)
     public String goToPage(HttpSession session, Map<String, Object> map,
@@ -83,7 +102,8 @@ public class ForeProductDetailsController extends BaseController {
         }
         map.put("secKillStatus",secKillStatus);
         map.put("remainSeconds",remainSeconds);
-
+        Integer stock=redisService.get(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id(),int.class);
+        map.put("mee",stock);
         logger.info("获取产品子信息-分类信息");
         product.setProduct_category(categoryService.get(product.getProduct_category().getCategory_id()));
         logger.info("获取产品子信息-预览图片信息");
