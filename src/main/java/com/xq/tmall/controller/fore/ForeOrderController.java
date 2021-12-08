@@ -715,8 +715,8 @@ public class ForeOrderController extends BaseController {
             logger.info("更新产品销量信息");
             Product updateProduct = new Product()
                     .setProduct_id(product.getProduct_id())
-                    .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number())
-                    .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
+                    .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number());
+//                    .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
             logger.info("更新产品信息，产品ID值为：{}", product.getProduct_id());
             boolean yn = productService.update(updateProduct);
             if (!yn) {
@@ -731,8 +731,8 @@ public class ForeOrderController extends BaseController {
                 logger.info("更新产品销量信息");
                 Product updateProduct = new Product()
                         .setProduct_id(product.getProduct_id())
-                        .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number())
-                        .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
+                        .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number());
+//                        .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
                 logger.info("更新产品信息，产品ID值为：{}", product.getProduct_id());
                 boolean yn = productService.update(updateProduct);
                 if (!yn) {
@@ -754,7 +754,8 @@ public class ForeOrderController extends BaseController {
         boolean yn = productOrderService.update(productOrder);
         if (yn) {
             object.put("success", true);
-            object.put("url", "/order/pay/success/" + order_code);
+//            object.put("url", "/order/pay/success/" + order_code);
+            object.put("url", "/order/0/10");
         } else {
             object.put("success", false);
             object.put("url", "/order/0/10");
@@ -979,11 +980,13 @@ public class ForeOrderController extends BaseController {
         //预减库存
         long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + product.getProduct_id());//10
         if (stock < 0) {
-            logger.info("库存为0，秒杀失败！跳转");
             localOverMap.put(product.getProduct_id(), true);
             //跳转
 //            return ;
         }
+        Product updateProduct = new Product().setProduct_keep_sum(product_keep_sum1);
+
+
 
         logger.info("将收货地址等相关信息存入Cookie中,便于下次使用");
         Cookie[] cookies = new Cookie[]{
