@@ -984,7 +984,8 @@ public class ForeOrderController extends BaseController {
             //跳转
 //            return ;
         }
-        Product updateProduct = new Product().setProduct_keep_sum(product_keep_sum1);
+
+//        Product updateProduct = new Product().setProduct_keep_sum(product_keep_sum1);
 
 
 
