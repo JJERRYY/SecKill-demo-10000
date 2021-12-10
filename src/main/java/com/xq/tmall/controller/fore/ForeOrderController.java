@@ -82,26 +82,26 @@ public class ForeOrderController extends BaseController {
     private HashMap<Integer, Boolean> localOverMap = new HashMap<Integer, Boolean>();
 
 
-    /**
-     * 系统初始化
-     */
-    public void afterPropertiesSet() throws Exception {
-        List<Product> goodsList = productService.getSeckillGoodsList();
-        if (goodsList == null) {
-            return;
-        }
-        for (Product goods : goodsList) {
-            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
-            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
-        }
+//    /**
+//     * 系统初始化
+//     */
+//    public void afterPropertiesSet() throws Exception {
+//        List<Product> goodsList = productService.getSeckillGoodsList();
+//        if (goodsList == null) {
+//            return;
+//        }
+//        for (Product goods : goodsList) {
+//            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
+//            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
+//        }
 
 
 //        for (ProductOrder productOrder){
 //            redisService.set()
 //
 //        }
-
-    }
+//
+//    }
 
 
     //转到前台天猫-订单列表页
