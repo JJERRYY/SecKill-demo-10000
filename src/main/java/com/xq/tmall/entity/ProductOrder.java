@@ -1,5 +1,6 @@
 package com.xq.tmall.entity;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Locale;
  * 订单实体类
  * @author 贤趣项目小组
  */
-public class ProductOrder {
+public class ProductOrder implements Serializable {
     private Integer productOrder_id/*订单ID*/;
     private String productOrder_code/*订单流水号*/;
     private Address productOrder_address/*订单地址*/;

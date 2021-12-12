@@ -37,7 +37,7 @@ public class ForeReviewController extends BaseController {
     //转到前台天猫-评论添加页
     @RequestMapping(value = "review/{orderItem_id}", method = RequestMethod.GET)
     public String goToPage(HttpSession session, Map<String, Object> map,
-                           @PathVariable("orderItem_id") Integer orderItem_id) {
+                           @PathVariable("orderItem_id") Integer orderItem_id) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -86,7 +86,7 @@ public class ForeReviewController extends BaseController {
     @RequestMapping(value = "review", method = RequestMethod.POST)
     public String addReview(HttpSession session, Map<String, Object> map,
                             @RequestParam Integer orderItem_id,
-                            @RequestParam String review_content) throws UnsupportedEncodingException {
+                            @RequestParam String review_content) throws Exception {
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -152,7 +152,7 @@ public class ForeReviewController extends BaseController {
     @RequestMapping(value = "review", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public String getReviewInfo(@RequestParam("product_id") Integer product_id,
                                 @RequestParam("index") Integer index/* 页数 */,
-                                @RequestParam("count") Integer count/* 行数*/) {
+                                @RequestParam("count") Integer count/* 行数*/) throws Exception{
         logger.info("获取产品评论信息");
         List<Review> reviewList = reviewService.getListByProductId(product_id, new PageUtil(index, 10));
         if (reviewList != null) {

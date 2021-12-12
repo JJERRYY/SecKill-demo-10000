@@ -262,7 +262,7 @@
 <!--    <sql id="Blob_Column_List" >-->
 <!--        goods.goods_detail-->
 <!--    </sql>-->
-<!--    <select id="selectAllGoodes" resultMap="BaseResultSeckillOrderAndGoodsMap">-->
+<!--    <select id="selectAllGoods" resultMap="BaseResultSeckillOrderAndGoodsMap">-->
 <!--        select-->
 <!--        <include refid="Base_Column_Seckill_List"/>-->
 <!--        ,-->
@@ -272,22 +272,21 @@
 <!--        from goods-->
 <!--        left join seckill_goods sg on sg.goods_id = goods.id-->
 <!--    </select>-->
-    <select id="selectAllGoodes" resultMap="productMap">
+    <select id="selectAllGoods" resultMap="productMap">
         SELECT
-        product_id,
-        product_name,
-        product_title,
-        product_price,
-        product_sale_price,
-        product_create_date,
-        product_start_time,
-        product_end_time,
-        product_keep_sum,
-<!--        product_real_sum,-->
-        product_isEnabled,
-        product_category_id,
-        product_sale_count,
-        product_review_count
+            product_id,
+            product_name,
+            product_title,
+            product_price,
+            product_sale_price,
+            product_create_date,
+            product_start_time,
+            product_end_time,
+            product_keep_sum,
+            product_isEnabled,
+            product_category_id,
+            product_sale_count,
+            product_review_count
         FROM product
     </select>
 </mapper>

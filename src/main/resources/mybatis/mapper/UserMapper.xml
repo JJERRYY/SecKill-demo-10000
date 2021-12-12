@@ -18,6 +18,7 @@
         <association property="user_homeplace" javaType="com.xq.tmall.entity.Address">
             <id property="address_areaId" column="user_homeplace"/>
         </association>
+
     </resultMap>
 
     <insert id="insertOne" parameterType="user">
@@ -98,4 +99,21 @@
             </where>
         </if>
     </select>
+
+
+    <select id="selectAllUsers" resultMap="userMap">
+        SELECT
+        user_id,
+        user_name,
+        user_nickname,
+        user_password,
+        user_realname,
+        user_gender,
+        user_birthday,
+        user_profile_picture_src,
+        user_address,
+        user_homeplace
+        FROM user
+    </select>
+
 </mapper>

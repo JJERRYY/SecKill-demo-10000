@@ -187,7 +187,10 @@ public class RedisService {
 			 return (String)value;
 		}else if(clazz == long.class || clazz == Long.class) {
 			return ""+value;
-		}else {
+		}else if(clazz==byte[].class){
+			return new String((byte[])value);
+		}
+		else {
 			return JSON.toJSONString(value);
 		}
 	}
@@ -210,7 +213,9 @@ public class RedisService {
 			 return (T)str;
 		}else if(clazz == long.class || clazz == Long.class) {
 			return  (T)Long.valueOf(str);
-		}else {
+		}else if(clazz==byte[].class){
+			return (T)str.getBytes();
+		} else {
 			return JSON.toJavaObject(JSON.parseObject(str), clazz);
 		}
 	}
@@ -250,12 +255,12 @@ public class RedisService {
 	 * 如果 key 不存在，一个空哈希表被创建并执行 HMSET 操作。
 	 *
 	 */
-	public <T> boolean setAllHash(KeyPrefix prefix, String key, Map<String, T> map, int exTime) {
+	public <T> boolean setAllHash(String key, Map<String, T> map, int exTime) {
 		Jedis jedis = null;
 		try {
 			jedis =  jedisPool.getResource();
 			//生成真正的key
-			String realKey  = prefix.getPrefix() + key;
+//			String realKey  = prefix.getPrefix() + key;
 			Map<String, String> mapmap =new HashMap<>();
 			map.forEach((k,v) -> mapmap.put(k,beanToString(v)));
 			if(exTime == 0) {

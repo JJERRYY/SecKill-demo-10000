@@ -17,7 +17,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getSeckillGoodsList() {
-        return productMapper.selectAllGoodes();
+        return productMapper.selectAllGoods();
     }
 
     private ProductMapper productMapper;

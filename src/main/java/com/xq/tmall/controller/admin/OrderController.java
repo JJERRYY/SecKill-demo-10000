@@ -67,7 +67,7 @@ OrderController extends BaseController{
 
     //转到后台管理-订单详情页-ajax
     @RequestMapping(value = "admin/order/{oid}", method = RequestMethod.GET)
-    public String goToDetailsPage(HttpSession session, Map<String, Object> map, @PathVariable Integer oid/* 订单ID */) {
+    public String goToDetailsPage(HttpSession session, Map<String, Object> map, @PathVariable Integer oid/* 订单ID */) throws Exception{
         logger.info("获取order_id为{}的订单信息",oid);
         ProductOrder order = productOrderService.get(oid);
         logger.info("获取订单详情-地址信息");

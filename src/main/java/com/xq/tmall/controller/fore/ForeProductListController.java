@@ -48,7 +48,7 @@ public class ForeProductListController extends BaseController {
     @RequestMapping(value = "product", method = RequestMethod.GET)
     public String goToPage(HttpSession session, Map<String, Object> map,
                            @RequestParam(value = "category_id", required = false) Integer category_id/* 分类ID */,
-                           @RequestParam(value = "product_name", required = false) String product_name/* 产品名称 */) {
+                           @RequestParam(value = "product_name", required = false) String product_name/* 产品名称 */) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         if (userId != null) {

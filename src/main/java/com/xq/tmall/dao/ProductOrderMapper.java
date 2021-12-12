@@ -14,7 +14,7 @@ import java.util.List;
 
 @Mapper
 public interface ProductOrderMapper {
-    ProductOrder selectByUserIdAndGoodsId(@Param("productOrder_user_id") Integer productOrder_user_id, @Param("productOrder_product_id") Integer productOrder_product_id);
+    //ProductOrder selectByUserIdAndGoodsId(@Param("productOrder_user_id") Integer productOrder_user_id, @Param("productOrder_product_id") Integer productOrder_product_id);
 //    Integer insert(ProductOrder record);
     Integer insertOne(@Param("productOrder") ProductOrder productOrder);
     Integer updateOne(@Param("productOrder") ProductOrder productOrder);
@@ -23,6 +23,8 @@ public interface ProductOrderMapper {
     List<ProductOrder> select(@Param("productOrder") ProductOrder productOrder, @Param("productOrder_status_array") Byte[] productOrder_status_array, @Param("orderUtil") OrderUtil orderUtil, @Param("pageUtil") PageUtil pageUtil);
     ProductOrder selectOne(@Param("productOrder_id") Integer productOrder_id);
     ProductOrder selectByCode(@Param("productOrder_code") String productOrder_code);
+    ProductOrder selectById(@Param("productOrder_id") Integer productOrder_id);
     Integer selectTotal(@Param("productOrder") ProductOrder productOrder, @Param("productOrder_status_array") Byte[] productOrder_status_array);
     List<OrderGroup> getTotalByDate(@Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
+    List<ProductOrder> selectAllOrders();
 }

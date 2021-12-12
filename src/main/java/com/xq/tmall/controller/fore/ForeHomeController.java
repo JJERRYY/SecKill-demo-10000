@@ -40,7 +40,7 @@ public class ForeHomeController extends BaseController {
 
     //转到前台天猫-主页
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String goToPage(HttpSession session, Map<String, Object> map) {
+    public String goToPage(HttpSession session, Map<String, Object> map) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         if (userId != null) {

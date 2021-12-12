@@ -46,24 +46,10 @@ public class ForeProductDetailsController extends BaseController {
     @Autowired
     RedisService redisService;
 
-//    private HashMap<Integer, Boolean> localOverMap = new HashMap<Integer, Boolean>();
-    /**
-     * 系统初始化
-     */
-//    public void afterPropertiesSet() throws Exception {
-//        List<Product> goodsList = productService.getSeckillGoodsList();
-//        if (goodsList == null) {
-//            return;
-//        }
-//        for (Product goods : goodsList) {
-//            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
-//            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
-//        }
-//    }
     //转到前台天猫-产品详情页
     @RequestMapping(value = "product/{pid}", method = RequestMethod.GET)
     public String goToPage(HttpSession session, Map<String, Object> map,
-                           @PathVariable("pid") String pid /*产品ID*/) {
+                           @PathVariable("pid") String pid /*产品ID*/) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         if (userId != null) {
@@ -169,6 +155,7 @@ public class ForeProductDetailsController extends BaseController {
         map.put("guessNumber", i);
         map.put("pageUtil", new PageUtil(0, 10).setTotal(product.getProduct_review_count()));
         logger.info("转到前台-产品详情页");
+
         return "fore/productDetailsPage";
     }
 

@@ -16,6 +16,7 @@ import com.xq.tmall.result.Result;
 import com.xq.tmall.util.CookieUtil;
 import com.xq.tmall.util.OrderUtil;
 import com.xq.tmall.util.PageUtil;
+import com.xq.tmall.util.SerializeUtil;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,28 +83,6 @@ public class ForeOrderController extends BaseController {
     private HashMap<Integer, Boolean> localOverMap = new HashMap<Integer, Boolean>();
 
 
-//    /**
-//     * 系统初始化
-//     */
-//    public void afterPropertiesSet() throws Exception {
-//        List<Product> goodsList = productService.getSeckillGoodsList();
-//        if (goodsList == null) {
-//            return;
-//        }
-//        for (Product goods : goodsList) {
-//            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
-//            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
-//        }
-
-
-//        for (ProductOrder productOrder){
-//            redisService.set()
-//
-//        }
-//
-//    }
-
-
     //转到前台天猫-订单列表页
     @RequestMapping(value = "order", method = RequestMethod.GET)
     public String goToPageSimple() {
@@ -113,7 +92,7 @@ public class ForeOrderController extends BaseController {
     public String goToPage(HttpSession session, Map<String, Object> map,
                            @RequestParam(required = false) Byte status,
                            @PathVariable("index") Integer index/* 页数 */,
-                           @PathVariable("count") Integer count/* 行数*/) {
+                           @PathVariable("count") Integer count/* 行数*/) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -187,7 +166,7 @@ public class ForeOrderController extends BaseController {
                                        Map<String, Object> map,
                                        Model model,
                                        HttpSession session,
-                                       HttpServletRequest request) throws UnsupportedEncodingException {
+                                       HttpServletRequest request) throws Exception {
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -290,7 +269,7 @@ public class ForeOrderController extends BaseController {
     @RequestMapping(value = "order/create/byCart", method = RequestMethod.GET)
     public String goToOrderConfirmPageByCart(Map<String, Object> map,
                                              HttpSession session, HttpServletRequest request,
-                                             @RequestParam(required = false) Integer[] order_item_list) throws UnsupportedEncodingException {
+                                             @RequestParam(required = false) Integer[] order_item_list) throws Exception {
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -399,7 +378,7 @@ public class ForeOrderController extends BaseController {
     //转到前台天猫-订单支付页
     @RequestMapping(value = "order/pay/{order_code}", method = RequestMethod.GET)
     public String goToOrderPayPage(Map<String, Object> map, HttpSession session,
-                                   @PathVariable("order_code") String order_code) {
+                                   @PathVariable("order_code") String order_code) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -413,6 +392,8 @@ public class ForeOrderController extends BaseController {
         logger.info("------验证订单信息------");
         logger.info("查询订单是否存在");
         ProductOrder order = productOrderService.getByCode(order_code);
+//        byte[] productOrder=redisService.getAllHash("" + order_code,byte[].class).get(order_code);
+//        ProductOrder order = (ProductOrder) SerializeUtil.unserialize(productOrder);
         if (order == null) {
             logger.warn("订单不存在，返回订单列表页");
             return "redirect:/order/0/10";
@@ -437,9 +418,15 @@ public class ForeOrderController extends BaseController {
             product.setProduct_category(categoryService.get(product.getProduct_category().getCategory_id()));
             productOrderItem.setProductOrderItem_product(product);
             orderTotalPrice = productOrderItem.getProductOrderItem_price();
+            redisService.delnx(String.valueOf(productOrderItem.getProductOrderItem_product().getProduct_id()),String.valueOf(productOrderItem.getProductOrderItem_user().getUser_id()));
+            logger.info("解锁成功");
+
+
         } else {
             for (ProductOrderItem productOrderItem : order.getProductOrderItemList()) {
                 orderTotalPrice += productOrderItem.getProductOrderItem_price();
+                redisService.delnx(String.valueOf(productOrderItem.getProductOrderItem_product().getProduct_id()),String.valueOf(productOrderItem.getProductOrderItem_user().getUser_id()));
+                logger.info("解锁成功");
             }
         }
         logger.info("订单总金额为：{}元", orderTotalPrice);
@@ -455,7 +442,7 @@ public class ForeOrderController extends BaseController {
     @RequestMapping(value = "order/pay/success/{order_code}", method = RequestMethod.GET)
     public String goToOrderPaySuccessPage(Map<String, Object> map, HttpSession session,
                                           @PathVariable("product_id") Integer product_id,
-                                          @PathVariable("order_code") String order_code) {
+                                          @PathVariable("order_code") String order_code) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -526,7 +513,7 @@ public class ForeOrderController extends BaseController {
     //转到前台天猫-订单确认页
     @RequestMapping(value = "order/confirm/{order_code}", method = RequestMethod.GET)
     public String goToOrderConfirmPage(Map<String, Object> map, HttpSession session,
-                                       @PathVariable("order_code") String order_code) {
+                                       @PathVariable("order_code") String order_code) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -587,7 +574,7 @@ public class ForeOrderController extends BaseController {
     //转到前台天猫-订单完成页
     @RequestMapping(value = "order/success/{order_code}", method = RequestMethod.GET)
     public String goToOrderSuccessPage(Map<String, Object> map, HttpSession session,
-                                       @PathVariable("order_code") String order_code) {
+                                       @PathVariable("order_code") String order_code) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -643,7 +630,7 @@ public class ForeOrderController extends BaseController {
 
     //转到前台天猫-购物车页
     @RequestMapping(value = "cart", method = RequestMethod.GET)
-    public String goToCartPage(Map<String, Object> map, HttpSession session) {
+    public String goToCartPage(Map<String, Object> map, HttpSession session) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         User user;
@@ -679,7 +666,7 @@ public class ForeOrderController extends BaseController {
     //更新订单信息为已支付，待发货-ajax
     @ResponseBody
     @RequestMapping(value = "order/pay/{order_code}", method = RequestMethod.PUT)
-    public String orderPay(HttpSession session, @PathVariable("order_code") String order_code) {
+    public String orderPay(HttpSession session, @PathVariable("order_code") String order_code) throws Exception{
         JSONObject object = new JSONObject();
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
@@ -774,7 +761,7 @@ public class ForeOrderController extends BaseController {
 
     //更新订单信息为已发货，待确认-ajax
     @RequestMapping(value = "order/delivery/{order_code}", method = RequestMethod.GET)
-    public String orderDelivery(HttpSession session, @PathVariable("order_code") String order_code) {
+    public String orderDelivery(HttpSession session, @PathVariable("order_code") String order_code) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         if (userId == null) {
@@ -811,7 +798,7 @@ public class ForeOrderController extends BaseController {
     //更新订单信息为交易成功-ajax
     @ResponseBody
     @RequestMapping(value = "order/success/{order_code}", method = RequestMethod.PUT, produces = "application/json;charset=utf-8")
-    public String orderSuccess(HttpSession session, @PathVariable("order_code") String order_code) {
+    public String orderSuccess(HttpSession session, @PathVariable("order_code") String order_code) throws Exception{
         JSONObject object = new JSONObject();
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
@@ -861,7 +848,7 @@ public class ForeOrderController extends BaseController {
     //更新订单信息为交易关闭-ajax
     @ResponseBody
     @RequestMapping(value = "order/close/{order_code}", method = RequestMethod.PUT, produces = "application/json;charset=utf-8")
-    public String orderClose(HttpSession session, @PathVariable("order_code") String order_code) {
+    public String orderClose(HttpSession session, @PathVariable("order_code") String order_code) throws Exception{
         JSONObject object = new JSONObject();
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
@@ -911,7 +898,7 @@ public class ForeOrderController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "orderItem", method = RequestMethod.PUT, produces = "application/json;charset=utf-8")
     public String updateOrderItem(HttpSession session, Map<String, Object> map, HttpServletResponse response,
-                                  @RequestParam String orderItemMap) {
+                                  @RequestParam String orderItemMap) throws Exception{
         JSONObject object = new JSONObject();
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
@@ -1070,6 +1057,9 @@ public class ForeOrderController extends BaseController {
                 logger.info("订单{}异步入队列，发送异常]",order_id , e);
             }
         });
+        redisService.setnx(String.valueOf(product.getProduct_id()),String.valueOf(productOrder.getProductOrder_user().getUser_id()));
+        logger.info("解锁成功");
+//        redisService.delnx(String.valueOf(product.getProduct_id()),String.valueOf(productOrder.getProductOrder_user().getUser_id()));
         return object.toJSONString();
     }
 

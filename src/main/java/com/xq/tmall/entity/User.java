@@ -1,5 +1,6 @@
 package com.xq.tmall.entity;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Locale;
  * 用户实体类
  * @author 贤趣项目小组
  */
-public class User {
+public class User implements Serializable {
     private Integer user_id/*用户ID*/;
     private String user_name/*用户登录名*/;
     private String user_nickname/*用户昵称*/;

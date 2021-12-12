@@ -2,6 +2,7 @@ package com.xq.tmall.service.impl;
 
 import com.xq.tmall.dao.CategoryMapper;
 import com.xq.tmall.entity.Category;
+import com.xq.tmall.entity.Product;
 import com.xq.tmall.service.CategoryService;
 import com.xq.tmall.util.PageUtil;
 import org.springframework.stereotype.Service;
@@ -46,4 +47,11 @@ public class CategoryServiceImpl implements CategoryService {
     public Integer getTotal(String category_name) {
         return categoryMapper.selectTotal(category_name);
     }
+
+    @Override
+    public List<Category> getSeckillCategoryList() {
+        return categoryMapper.selectAllCategory();
+    }
+
+
 }

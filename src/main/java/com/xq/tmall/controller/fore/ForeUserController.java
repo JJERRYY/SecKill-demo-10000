@@ -37,7 +37,7 @@ public class ForeUserController extends BaseController{
 
     //转到前台天猫-用户详情页
     @RequestMapping(value = "userDetails", method = RequestMethod.GET)
-    public String goToUserDetail(HttpSession session, Map<String,Object> map){
+    public String goToUserDetail(HttpSession session, Map<String,Object> map) throws Exception{
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         if (userId != null) {
@@ -104,7 +104,7 @@ public class ForeUserController extends BaseController{
                              @RequestParam(value = "user_profile_picture_src", required = false)
                                          String user_profile_picture_src /* 用户头像*/,
                              @RequestParam(value = "user_password") String user_password/* 用户密码 */
-    ) throws ParseException, UnsupportedEncodingException {
+    ) throws ParseException, UnsupportedEncodingException,Exception {
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
         if (userId != null) {

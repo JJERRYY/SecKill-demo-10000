@@ -1,5 +1,6 @@
 package com.xq.tmall.dao;
 
+import com.xq.tmall.entity.ProductOrder;
 import com.xq.tmall.entity.User;
 import com.xq.tmall.util.OrderUtil;
 import com.xq.tmall.util.PageUtil;
@@ -17,4 +18,5 @@ public interface UserMapper {
     User selectOne(@Param("user_id") Integer user_id);
     User selectByLogin(@Param("user_name") String user_name, @Param("user_password") String user_password);
     Integer selectTotal(@Param("user") User user);
+    List<User> selectAllUsers();
 }

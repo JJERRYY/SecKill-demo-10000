@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProductOrderService {
-    ProductOrder getSeckillOrderByUserIdGoodsId(Integer productOrder_user_id, Integer productOrder_product_id);
+    //ProductOrder getSeckillOrderByUserIdGoodsId(Integer productOrder_user_id, Integer productOrder_product_id) throws Exception;
 
     boolean add(ProductOrder productOrder);
     boolean update(ProductOrder productOrder);
@@ -22,16 +22,19 @@ public interface ProductOrderService {
 
     List<OrderGroup> getTotalByDate(Date beginDate, Date endDate);
 
-    ProductOrder get(Integer productOrder_id);
-    ProductOrder getByCode(String productOrder_code);
+    ProductOrder get(Integer productOrder_id) throws Exception;
+    ProductOrder getByCode(String productOrder_code) throws Exception;
     Integer getTotal(ProductOrder productOrder,Byte[] productOrder_status_array);
+    ProductOrder getById(Integer productOrder_id) throws Exception;
 //
 //    ProductOrder insert(User user , Product product);
 
-    String createMiaoshaPath(User user, Integer product_id);
+    //String createMiaoshaPath(User user, Integer product_id);
 
 //    OrderInfo insert(User user , GoodsBo goodsBo);
-    long getSeckillResult(Integer user_id, Integer product_id);
+//    long getSeckillResult(Integer user_id, Integer product_id);
+//
+//    boolean checkPath(User user, Integer product_id, String path);
 
-    boolean checkPath(User user, Integer product_id, String path);
+    List<ProductOrder> getSeckillOrdersList();
 }

@@ -34,18 +34,22 @@ public class UnpaidMessageConsumer implements RocketMQListener<Order> {
     public void onMessage(Order order) {
         //触发监听之后去查根据Order.orderId的订单编号去数据库/Redis缓存里查是否付款,没付款取消订单
         logger.info("延迟消息[onMessage][线程编号:{} 内容：{}]", Thread.currentThread().getId(), order);
-        if (productOrderService.get(order.getOrderId()).getProductOrder_status()==0){
-            logger.info("订单ID{}超时未付款，关闭订单",order.getOrderId());
-            ProductOrder productOrder = new ProductOrder()
-                    .setProductOrder_id(order.getOrderId())
-                    .setProductOrder_status((byte) 4);
-            boolean yn = productOrderService.update(productOrder);
+        try {
+            if (productOrderService.get(order.getOrderId()).getProductOrder_status()==0){
+                logger.info("订单ID{}超时未付款，关闭订单",order.getOrderId());
+                ProductOrder productOrder = new ProductOrder()
+                        .setProductOrder_id(order.getOrderId())
+                        .setProductOrder_status((byte) 4);
+                boolean yn = productOrderService.update(productOrder);
 
-//            productOrderService.deleteList(new Integer[]{order.getOrderId()});
-            long stock = redisService.incr(GoodsKey.getSeckillGoodsStock, "" + order.getOrderId());
+    //            productOrderService.deleteList(new Integer[]{order.getOrderId()});
+                long stock = redisService.incr(GoodsKey.getSeckillGoodsStock, "" + order.getOrderId());
 
-        }else{
-            logger.info("订单id{}已付款",order.getOrderId());
+            }else{
+                logger.info("订单id{}已付款",order.getOrderId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 

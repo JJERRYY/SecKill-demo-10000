@@ -1,6 +1,7 @@
 package com.xq.tmall.dao;
 
 import com.xq.tmall.entity.Category;
+import com.xq.tmall.entity.ProductOrder;
 import com.xq.tmall.util.PageUtil;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,4 +16,6 @@ public interface CategoryMapper {
     List<Category> select(@Param("category_name") String category_name, @Param("pageUtil") PageUtil pageUtil);
     Category selectOne(@Param("category_id") Integer category_id);
     Integer selectTotal(@Param("category_name") String category_name);
+
+    List<Category> selectAllCategory();
 }

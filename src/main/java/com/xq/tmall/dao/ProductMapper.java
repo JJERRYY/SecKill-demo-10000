@@ -13,7 +13,7 @@ public interface ProductMapper {
     Integer insertOne(@Param("product") Product product);
     Integer updateOne(@Param("product") Product product);
 
-    List<Product> selectAllGoodes();
+    List<Product> selectAllGoods();
 
 
     List<Product> select(@Param("product") Product product,@Param("product_isEnabled_array") Byte[] product_isEnabled_array, @Param("orderUtil") OrderUtil orderUtil, @Param("pageUtil") PageUtil pageUtil);
