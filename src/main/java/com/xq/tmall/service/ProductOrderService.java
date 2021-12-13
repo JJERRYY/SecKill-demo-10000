@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProductOrderService {
-    //ProductOrder getSeckillOrderByUserIdGoodsId(Integer productOrder_user_id, Integer productOrder_product_id) throws Exception;
+    ProductOrder getSeckillOrderByUserIdGoodsId(Integer productOrder_user_id, Integer productOrder_product_id) throws Exception;
 
     boolean add(ProductOrder productOrder);
     boolean update(ProductOrder productOrder);

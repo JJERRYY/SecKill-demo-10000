@@ -151,25 +151,37 @@ public class ProductOrderServiceImpl implements ProductOrderService{
         return productOrderMapper.selectById(productOrder_id);
     }
 
+    private Map<String, Object> map_productOrder_good_user() throws Exception{
+        Map<String, Object> map =new HashMap<>();
+        List<ProductOrder> orderList = productOrderService.getSeckillOrdersList();
+        for (ProductOrder order:orderList)
+        {
+            map.put("" + order.getProductOrder_user()+""+order.getProductOrder_product(),order);
+        }
+        return map;
 
-//    @Override
-//    public ProductOrder getSeckillOrderByUserIdGoodsId(Integer productOrder_user_id, Integer productOrder_product_id){
-////        User user=redisService.get(""+,User.class,Const.RedisCacheExtime.GOODS_LIST);
-////        if (user!=null)
-////        {
-////            return user;
-////        }
-////        user
-////        map_productOrder_id();
-////        ProductOrder productOrder = redisService.getAllHash(":"+productOrder_product_id+productOrder_user_id+"_",String.class).get(":"+productOrder_product_id+productOrder_user_id+"_");
-////        if (productOrder!=null)
-////        {
-////            redisService.setAllHash(":"+productOrder_product_id+productOrder_user_id+"_",map_productOrder_id(),Const.RedisCacheExtime.GOODS_LIST);
-////        }
-//
+    }
+
+    @Override
+    public ProductOrder getSeckillOrderByUserIdGoodsId(Integer productOrder_user_id, Integer productOrder_product_id) throws Exception{
+        byte[] productOrder=redisService.getAllHash("" + productOrder_user_id+""+productOrder_product_id,byte[].class).get("" + productOrder_user_id+""+productOrder_product_id);
+        ProductOrder resultProductOrder1 = (ProductOrder)SerializeUtil.unserialize(productOrder);
+        if (resultProductOrder1!=null)
+        {
+            return resultProductOrder1;
+        }
+        map_productOrder_good_user();
+        resultProductOrder1=productOrderMapper.selectByUserIdAndGoodsId(productOrder_user_id,productOrder_product_id);
+        if (resultProductOrder1!=null)
+        {
+            redisService.setAllHash("" + productOrder_user_id+""+productOrder_product_id,map_productOrder_good_user(),Const.RedisCacheExtime.GOODS_LIST);
+        }
+        System.out.println("订单用户及其商品信息");
+        System.out.println("1"+resultProductOrder1.getProductOrder_user());
+
 //        return productOrderMapper.selectByUserIdAndGoodsId(productOrder_user_id,productOrder_product_id);
-////        return productOrder;
-//    }
+        return resultProductOrder1;
+    }
 //    public String createMiaoshaPath(User user, Integer product_id) {
 //        if(user == null || product_id <=0) {
 //            return null;
