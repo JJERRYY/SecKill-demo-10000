@@ -81,6 +81,13 @@ public class ForeProductDetailsController extends BaseController {
             //秒杀结束
             secKillStatus = 2;
             remainSeconds = -1;
+
+
+
+
+
+
+
         }else{
             //进行
             secKillStatus = 1;

@@ -3,18 +3,30 @@ package com.xq.tmall.service.impl;
 import com.xq.tmall.dao.ProductOrderItemMapper;
 import com.xq.tmall.entity.OrderGroup;
 import com.xq.tmall.entity.ProductOrderItem;
+import com.xq.tmall.redis.RedisService;
 import com.xq.tmall.service.ProductOrderItemService;
 import com.xq.tmall.util.PageUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.xq.tmall.common.Const;
+import com.xq.tmall.redis.RedisService;
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import com.xq.tmall.util.SerializeUtil;
 @Service("productOrderItemService")
 public class ProductOrderItemServiceImpl implements ProductOrderItemService{
+    @Autowired
+    RedisService redisService;
+
+
+    @Resource(name = "productOrderItemService")
+    private ProductOrderItemService productOrderItemService;
+
     private ProductOrderItemMapper productOrderItemMapper;
     @Resource(name = "productOrderItemMapper")
     public void setProductOrderItemMapper(ProductOrderItemMapper productOrderItemMapper) {
@@ -59,9 +71,35 @@ public class ProductOrderItemServiceImpl implements ProductOrderItemService{
         return productOrderItemMapper.selectByProductId(product_id,pageUtil);
     }
 
+    private Map<String, Object> map_productOrderItem_id() throws Exception{
+        Map<String, Object> map =new HashMap<>();
+        List<ProductOrderItem> productOrderItems = productOrderItemService.getSeckillOrderItemList();
+        for (ProductOrderItem productOrderItem:productOrderItems)
+        {
+            map.put("" + productOrderItem.getProductOrderItem_id(),productOrderItem);
+        }
+        return map;
+
+    }
+
     @Override
-    public ProductOrderItem get(Integer productOrderItem_id) {
-        return productOrderItemMapper.selectOne(productOrderItem_id);
+    public ProductOrderItem get(Integer productOrderItem_id) throws Exception{
+        byte[] productOrderItem=redisService.getAllHash("" + productOrderItem_id,byte[].class).get("" + productOrderItem_id);
+        ProductOrderItem resultProductOrderItem = (ProductOrderItem)SerializeUtil.unserialize(productOrderItem);
+        if (resultProductOrderItem!=null)
+        {
+            return resultProductOrderItem;
+        }
+//        map_productOrder_id();
+        resultProductOrderItem=productOrderItemMapper.selectOne(productOrderItem_id);
+        if (resultProductOrderItem!=null)
+        {
+            redisService.setAllHash("" +productOrderItem_id,map_productOrderItem_id(),Const.RedisCacheExtime.GOODS_LIST);
+        }
+        System.out.println("订单item信息id");
+        System.out.println(resultProductOrderItem.getProductOrderItem_id());
+        return resultProductOrderItem;
+//        return productOrderItemMapper.selectOne(productOrderItem_id);
     }
 
     @Override
@@ -87,5 +125,10 @@ public class ProductOrderItemServiceImpl implements ProductOrderItemService{
     @Override
     public Integer getSaleCountByProductId(Integer product_id) {
         return productOrderItemMapper.selectSaleCount(product_id);
+    }
+
+    @Override
+    public List<ProductOrderItem> getSeckillOrderItemList() {
+        return productOrderItemMapper.selectAllOrderItem();
     }
 }

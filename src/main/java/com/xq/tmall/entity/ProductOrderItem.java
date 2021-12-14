@@ -1,10 +1,12 @@
 package com.xq.tmall.entity;
 
+import java.io.Serializable;
+
 /**
  * 订单项实体类
  * @author 贤趣项目小组
  */
-public class ProductOrderItem {
+public class ProductOrderItem implements Serializable {
     private Integer productOrderItem_id/*订单项ID*/;
     private Short productOrderItem_number/*订单项产品数量*/;
     private Double productOrderItem_price/*订单项产品总价格*/;

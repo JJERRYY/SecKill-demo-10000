@@ -16,7 +16,7 @@ public interface ProductOrderItemService {
     List<ProductOrderItem> getListByOrderId(Integer order_id, PageUtil pageUtil);
     List<ProductOrderItem> getListByUserId(Integer user_id, PageUtil pageUtil);
     List<ProductOrderItem> getListByProductId(Integer product_id, PageUtil pageUtil);
-    ProductOrderItem get(Integer productOrderItem_id);
+    ProductOrderItem get(Integer productOrderItem_id) throws Exception;
     Integer getTotal();
     Integer getTotalByOrderId(Integer order_id);
     Integer getTotalByUserId(Integer user_id);
@@ -24,4 +24,6 @@ public interface ProductOrderItemService {
     List<OrderGroup> getTotalByProductId(Integer product_id, Date beginDate, Date endDate);
 
     Integer getSaleCountByProductId(Integer product_id);
+
+    List<ProductOrderItem> getSeckillOrderItemList();
 }

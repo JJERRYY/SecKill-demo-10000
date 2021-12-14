@@ -3,10 +3,12 @@ package com.xq.tmall;
 import com.xq.tmall.common.Const;
 import com.xq.tmall.entity.Category;
 import com.xq.tmall.entity.Product;
+import com.xq.tmall.entity.ProductOrder;
 import com.xq.tmall.producer.OrderUnpaidProducer;
 import com.xq.tmall.redis.GoodsKey;
 import com.xq.tmall.redis.RedisService;
 import com.xq.tmall.service.CategoryService;
+import com.xq.tmall.service.ProductOrderService;
 import com.xq.tmall.service.ProductService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,8 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
     private ProductService productService;
     @Resource(name="categoryService")
     private CategoryService categoryService;
+    @Resource(name = "productOrderService")
+    private ProductOrderService productOrderService;
     private HashMap<Integer, Boolean> localOverMap = new HashMap<Integer, Boolean>();
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -141,29 +145,42 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
 
     }
 
-    private void afterPropertiesSet() throws Exception {
-        map_product_name();
-        map_product_title();
-        map_product_sale_price();
-        map_product_start_date();
-        map_product_end_date();
-        map_product_sale_count();
-        map_category_name();
-        map_category_images();
-        List<Product> goodsList = productService.getSeckillGoodsList();
-        redisService.setAllHash("1",map_product_name(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("2",map_product_title(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("4",map_product_sale_price(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("5",map_product_start_date(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("6",map_product_end_date(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("7",map_product_sale_count(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("8",map_category_name(),Const.RedisCacheExtime.GOODS_LIST);
-        redisService.setAllHash("9",map_category_images(),Const.RedisCacheExtime.GOODS_LIST);
-        for (Product goods : goodsList) {
-            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
-
-            localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
+    private Map<String,Integer> map_productOrder_id() throws Exception{
+        Map<String, Integer> map =new HashMap<>();
+        List<ProductOrder> orderList =productOrderService.getSeckillOrdersList();
+        for (ProductOrder order:orderList)
+        {
+            map.put("10" + order.getProductOrder_id(),order.getProductOrder_id());
         }
+        return map;
+
+    }
+
+    private void afterPropertiesSet() throws Exception{
+//        if()
+//        {
+            List<Product> goodsList = productService.getSeckillGoodsList();
+            redisService.setAllHash("1", map_product_name(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("2", map_product_title(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("4", map_product_sale_price(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("5", map_product_start_date(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("6", map_product_end_date(), Const.RedisCacheExtime.GOODS_LIST);
+
+            redisService.setAllHash("7", map_product_sale_count(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("8", map_category_name(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("9", map_category_images(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.setAllHash("10", map_productOrder_id(), Const.RedisCacheExtime.GOODS_LIST);
+            for (Product goods : goodsList) {
+                redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
+
+                localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
+            }
+//        }
+
+
+
+
+
     }
 
     @Override

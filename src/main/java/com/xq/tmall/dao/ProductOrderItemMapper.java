@@ -27,4 +27,7 @@ public interface ProductOrderItemMapper {
     Integer selectSaleCount(@Param("product_id") Integer product_id);
 
     List<OrderGroup> getTotalByProductId(@Param("product_id") Integer product_id, @Param("beginDate") Date beginDate, @Param("endDate") Date endDate);
+    List<ProductOrderItem> selectAllOrderItem();
+
+
 }

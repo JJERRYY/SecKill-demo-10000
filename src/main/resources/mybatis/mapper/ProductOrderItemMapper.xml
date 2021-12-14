@@ -145,4 +145,16 @@
         </where>
         GROUP BY productOrder.productOrder_pay_date,productOrder.productOrder_status
     </select>
+
+    <select id="selectAllOrderItems" resultMap="productOrderItemMap">
+        SELECT
+        productOrderItem_id,
+        productOrderItem_number,
+        productOrderItem_price,
+        productOrderItem_product_id,
+        productOrderItem_order_id,
+        productOrderItem_user_id,
+        productOrderItem_userMessage
+        FROM productOrderItem
+    </select>
 </mapper>
