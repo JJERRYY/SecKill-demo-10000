@@ -6,6 +6,7 @@ import com.xq.tmall.entity.Product;
 import com.xq.tmall.entity.ProductOrder;
 import com.xq.tmall.producer.OrderUnpaidProducer;
 import com.xq.tmall.redis.GoodsKey;
+import com.xq.tmall.redis.OrderKey;
 import com.xq.tmall.redis.RedisService;
 import com.xq.tmall.service.CategoryService;
 import com.xq.tmall.service.ProductOrderService;
@@ -145,18 +146,23 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
 
     }
 
-    private Map<String,Integer> map_productOrder_id() throws Exception{
+    private int map_productOrder_id() throws Exception{
+
         Map<String, Integer> map =new HashMap<>();
         List<ProductOrder> orderList =productOrderService.getSeckillOrdersList();
-        for (ProductOrder order:orderList)
-        {
-            map.put("10" + order.getProductOrder_id(),order.getProductOrder_id());
-        }
-        return map;
+//        for (ProductOrder order:orderList)
+//        {
+//            map.put("10" + order.getProductOrder_id(),order.getProductOrder_id());
+//        }
+        int last =orderList.get(orderList.size()-1).getProductOrder_id();
+        return last;
 
     }
 
     private void afterPropertiesSet() throws Exception{
+//        redisService.set(OrderKey.getOrder,"flag",0,Const.RedisCacheExtime.GOODS_LIST);
+//        logger.info(redisService.get(OrderKey.getOrder,"flag",int.class));
+//        if (redisService.get(OrderKey.getOrder,"flag",int.class)==0) {
 //        if()
 //        {
             List<Product> goodsList = productService.getSeckillGoodsList();
@@ -169,12 +175,16 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
             redisService.setAllHash("7", map_product_sale_count(), Const.RedisCacheExtime.GOODS_LIST);
             redisService.setAllHash("8", map_category_name(), Const.RedisCacheExtime.GOODS_LIST);
             redisService.setAllHash("9", map_category_images(), Const.RedisCacheExtime.GOODS_LIST);
-            redisService.setAllHash("10", map_productOrder_id(), Const.RedisCacheExtime.GOODS_LIST);
+//            long productOrder_id = redisService.set(OrderKey.getOrder,"1"+product.getProduct_id(),int.class);//10
+//            redisService.setAllHash("10", map_productOrder_id(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.set(OrderKey.getOrder, "100", map_productOrder_id(), Const.RedisCacheExtime.GOODS_LIST);
             for (Product goods : goodsList) {
                 redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getProduct_id(), goods.getProduct_keep_sum(), Const.RedisCacheExtime.GOODS_LIST);
 
                 localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
             }
+            redisService.set(OrderKey.getOrder, "flag", 1, Const.RedisCacheExtime.GOODS_LIST);
+//        }
 //        }
 
 

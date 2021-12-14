@@ -2,21 +2,15 @@ package com.xq.tmall.controller.fore;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xq.tmall.annotations.AccessLimit;
 import com.xq.tmall.common.Const;
 import com.xq.tmall.controller.BaseController;
 import com.xq.tmall.entity.*;
 import com.xq.tmall.producer.OrderUnpaidProducer;
 import com.xq.tmall.redis.GoodsKey;
-import com.xq.tmall.redis.UserKey;
-import com.xq.tmall.result.CodeMsg;
-import com.xq.tmall.result.Result;
+import com.xq.tmall.redis.OrderKey;
 import com.xq.tmall.service.*;
-import com.xq.tmall.result.Result;
-import com.xq.tmall.util.CookieUtil;
 import com.xq.tmall.util.OrderUtil;
 import com.xq.tmall.util.PageUtil;
-import com.xq.tmall.util.SerializeUtil;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,20 +28,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.springframework.ui.Model;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.rocketmq.client.producer.SendCallback;
-import org.apache.rocketmq.client.producer.SendResult;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import com.xq.tmall.result.CodeMsg;
-import com.xq.tmall.result.Result;
-import com.xq.tmall.message.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 /**
@@ -1011,6 +992,7 @@ public class ForeOrderController extends BaseController {
                 .append(userId);
         logger.info("生成的订单号为：{}", productOrder_code);
         logger.info("整合订单对象");
+        Long product_id1=redisService.incr(OrderKey.getOrder,"100");//10
         ProductOrder productOrder = new ProductOrder()
                 .setProductOrder_status((byte) 0)
                 .setProductOrder_address(new Address().setAddress_areaId(districtAddressId))
@@ -1021,6 +1003,13 @@ public class ForeOrderController extends BaseController {
                 .setProductOrder_detail_address(productOrder_detail_address)
                 .setProductOrder_pay_date(new Date())
                 .setProductOrder_code(productOrder_code.toString());
+        logger.info("存入reids的自增订单号");
+        logger.info(product_id1);
+        redisService.set(OrderKey.getOrder,"100"+product.getProduct_id(),product_id1,Const.RedisCacheExtime.GOODS_LIST );
+
+
+
+//        redisService.set()
         Boolean yn = productOrderService.add(productOrder);
         if (!yn) {
             throw new RuntimeException();
@@ -1074,7 +1063,7 @@ public class ForeOrderController extends BaseController {
                                     @RequestParam String productOrder_post,
                                     @RequestParam String productOrder_receiver,
                                     @RequestParam String productOrder_mobile,
-                                    @RequestParam String orderItemJSON) throws UnsupportedEncodingException {
+                                    @RequestParam String orderItemJSON) throws Exception {
         JSONObject object = new JSONObject();
         logger.info("检查用户是否登录");
         Object userId = checkUser(session);
@@ -1146,6 +1135,7 @@ public class ForeOrderController extends BaseController {
                 .setProductOrder_detail_address(productOrder_detail_address)
                 .setProductOrder_pay_date(new Date())
                 .setProductOrder_code(productOrder_code.toString());
+
         Boolean yn = productOrderService.add(productOrder);
         if (!yn) {
             throw new RuntimeException();
