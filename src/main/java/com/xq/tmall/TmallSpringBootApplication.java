@@ -160,11 +160,12 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
     }
 
     private void afterPropertiesSet() throws Exception{
-//        redisService.set(OrderKey.getOrder,"flag",0,Const.RedisCacheExtime.GOODS_LIST);
+        redisService.set(OrderKey.getOrder,"flag",0,Const.RedisCacheExtime.GOODS_LIST);
+        Integer flag=redisService.get(OrderKey.getOrder,"flag",int.class);
+        System.out.println("flag");
+        System.out.println(flag);
 //        logger.info(redisService.get(OrderKey.getOrder,"flag",int.class));
-//        if (redisService.get(OrderKey.getOrder,"flag",int.class)==0) {
-//        if()
-//        {
+        if (redisService.get(OrderKey.getOrder,"flag",int.class)==0) {
             List<Product> goodsList = productService.getSeckillGoodsList();
             redisService.setAllHash("1", map_product_name(), Const.RedisCacheExtime.GOODS_LIST);
             redisService.setAllHash("2", map_product_title(), Const.RedisCacheExtime.GOODS_LIST);
@@ -183,8 +184,8 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
 
                 localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
             }
-            redisService.set(OrderKey.getOrder, "flag", 1, Const.RedisCacheExtime.GOODS_LIST);
-//        }
+            redisService.incr(OrderKey.getOrder, "flag");
+        }
 //        }
 
 
