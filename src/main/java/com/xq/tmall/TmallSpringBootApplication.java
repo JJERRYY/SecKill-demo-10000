@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.stereotype.Component;
 
 /**
  * 项目启动类入口
@@ -186,7 +188,8 @@ public class TmallSpringBootApplication extends SpringBootServletInitializer imp
 
                 localOverMap.put(Integer.valueOf(goods.getProduct_id()), false);
             }
-            redisService.incr(OrderKey.getOrder, "flag");
+            redisService.set(OrderKey.getOrder,"flag",1,Const.RedisCacheExtime.GOODS_LIST);
+
         }
 //        }
 

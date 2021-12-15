@@ -81,8 +81,39 @@ public class ForeProductDetailsController extends BaseController {
             //秒杀结束
             secKillStatus = 2;
             remainSeconds = -1;
+            Product updateProduct = new Product()
+                    .setProduct_name(product.getProduct_name())
+                    .setProduct_title(product.getProduct_title())
+                    .setProduct_sale_count(product.getProduct_sale_count())
+                    .setProduct_keep_sum(product.getProduct_keep_sum());
+            boolean yn = productService.update(updateProduct);
+            if (!yn) {
+                logger.info("产品信息更新失败！事务回滚");
+            }
+            logger.info("产品信息更新成功!");
+//            Category category=new Category()
+//                    .setCategory_name(cate)
 
 
+
+
+//            for (ProductOrderItem productOrderItem : order.getProductOrderItemList()) {
+//                Product product = productService.get(productOrderItem.getProductOrderItem_product().getProduct_id());
+//                logger.info("更新产品销量信息");
+//                Product updateProduct = new Product()
+//                        .setProduct_id(product.getProduct_id())
+//                        .setProduct_sale_count(product.getProduct_sale_count() + productOrderItem.getProductOrderItem_number());
+////                        .setProduct_keep_sum(product.getProduct_keep_sum() - productOrderItem.getProductOrderItem_number());
+//                logger.info("更新产品信息，产品ID值为：{}", product.getProduct_id());
+//                boolean yn = productService.update(updateProduct);
+//                if (!yn) {
+//                    logger.info("产品销量信息更新失败！事务回滚");
+//                    object.put("success", false);
+//                    throw new RuntimeException();
+//                }
+//                logger.info("产品销量信息更新成功！");
+//                orderTotalPrice += productOrderItem.getProductOrderItem_price();
+//            }
 
 
 
