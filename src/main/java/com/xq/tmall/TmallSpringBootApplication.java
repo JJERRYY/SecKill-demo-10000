@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
@@ -38,6 +39,7 @@ import java.util.Map;
 @SpringBootApplication
 @EnableTransactionManagement
 @ServletComponentScan
+@EnableRedisHttpSession
 @MapperScan("com.xq.tmall.dao")
 public class TmallSpringBootApplication extends SpringBootServletInitializer implements CommandLineRunner {
     @Autowired
