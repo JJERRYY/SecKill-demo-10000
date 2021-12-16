@@ -81,16 +81,41 @@ public class ForeProductDetailsController extends BaseController {
             //秒杀结束
             secKillStatus = 2;
             remainSeconds = -1;
-            Product updateProduct = new Product()
-                    .setProduct_name(product.getProduct_name())
-                    .setProduct_title(product.getProduct_title())
-                    .setProduct_sale_count(product.getProduct_sale_count())
-                    .setProduct_keep_sum(product.getProduct_keep_sum());
-            boolean yn = productService.update(updateProduct);
-            if (!yn) {
-                logger.info("产品信息更新失败！事务回滚");
-            }
-            logger.info("产品信息更新成功!");
+//            Product updateProduct = new Product()
+//                    .setProduct_name(product.getProduct_name())
+//                    .setProduct_title(product.getProduct_title())
+//                    .setProduct_sale_count(product.getProduct_sale_count())
+//                    .setProduct_keep_sum(product.getProduct_keep_sum());
+//            boolean yn = productService.update(updateProduct);
+//            if (!yn) {
+//                logger.info("产品信息更新失败！事务回滚");
+//            }
+//            logger.info("产品信息更新成功!");
+            List<Product> productList=productService.getSeckillGoodsList();
+//            List<Category> categoryList = categoryService.getSeckillCategoryList();
+            for (Product product2:productList)
+            {
+            productService.update(new Product()
+                    .setProduct_keep_sum(redisService.get(GoodsKey.getSeckillGoodsStock, "" +product2.getProduct_id(),int.class)));
+//            .setProduct_name(redisService.getAllHash("1",String.class).get("1"+product2.getProduct_id()))
+//                    .setProduct_title(redisService.getAllHash("2",String.class).get("2"+product2.getProduct_id()))
+//                    .setProduct_sale_price(redisService.getAllHash("4",Double.class).get("4"+product2.getProduct_id()))
+//                    .setProduct_sale_price(redisService.getAllHash("4",Double.class).get("4"+product2.getProduct_id()))
+//                    .setProduct_start_time(redisService.getAllHash("5",Date.class).get("5"+product2.getProduct_id()))
+//                    .setProduct_end_time(redisService.getAllHash("6",Date.class).get("6"+product2.getProduct_id()))
+//            );
+
+
+
+        }
+//        for (Category category1:categoryList)
+//        {
+//            categoryService.update(new Category().setCategory_name(redisService.getAllHash("8",String.class).get("8" + category1.getCategory_id()))
+//                    .setCategory_image_src(redisService.getAllHash("9",String.class).get("9" + category1.getCategory_image_src())));
+////                category1.setCategory_name(redisService.getAllHash("8",String.class).get("8" + category1.getCategory_id()));
+////                category1.setCategory_image_src(redisService.getAllHash("9",String.class).get("9" + category1.getCategory_image_src()));
+//
+//        }
 //            Category category=new Category()
 //                    .setCategory_name(cate)
 
