@@ -2,7 +2,6 @@ package com.xq.tmall.entity;
 
 /**
  * 管理员实体类
- * @author 贤趣项目小组
  */
 public class Admin {
     private Integer admin_id/*管理员ID*/;

@@ -6,7 +6,6 @@ import java.util.Locale;
 
 /**
  * 打赏实体类
- * @author 贤趣项目小组
  */
 public class Reward {
     private Integer reward_id/*打赏ID*/;

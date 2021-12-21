@@ -84,53 +84,9 @@
     </ul>
     <a href="#"></a>
 </div>
-
-
-    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
-    <body background=“www.jpg”>
-        <script type="text/javascript">
-            //添加timer标识
-            var obj ={};
-            $(function(){
-                $("div[end!='']").each(function(){
-                    var timerDiv = $(this).attr("id");
-                    obj[timerDiv] = new Date($(this).attr("end"));
-                    obj[timerDiv].minilions = obj[timerDiv].getTime();
-                    //var obj[timerDiv].timer;
-                    if(obj[timerDiv].timer){
-                        clearInterval(obj[timerDiv].timer);
-                    }
-                    obj[timerDiv].timer = setInterval(function(){
-                        var currentTime = new Date();
-                        $("#currentTimer").html(
-                            currentTime.getFullYear()+"/"+currentTime.getMonth()+"/"+currentTime.getDate()+" "+
-                            currentTime.getHours()+":"+currentTime.getMinutes()+":"+currentTime.getSeconds());
-                        timecount(obj[timerDiv],timerDiv);
-                    },1000);
-                });
-            })
-            function timecount(currentTimer,timerDiv){
-                var distance = currentTimer -new Date();
-                var hourse = 60*60*1000;
-                var minutes = 60*1000;
-                var seconds= 1000;
-                var mhour = parseInt(distance/hourse);
-                var mminu = parseInt((distance-mhour*hourse)/minutes);
-                var msecond = parseInt((distance-mhour*hourse-mminu*minutes)/seconds);
-                var str = mhour+":"+mminu+":"+msecond;
-                $("#"+timerDiv).html(str);
-                if(mhour==0 && mminu==0 && msecond==0 || (msecond<0)){
-                    clearInterval(obj[timerDiv].timer);
-                    $("#"+timerDiv).html("秒杀开启!");
-                }
-            }
-        </script>
-        <td></td><br/>
-        <td style="color:green">秒杀开始时间:2021/11/22 10:40:30<br/></td>
-        <td>当前时间:<div id="currentTimer" style="background-color:red"></div></td>
-        <td>剩余时间：<div id="timer" end="2021/11/22 15:44:30" style="background-color:pink"></div></td>
-
-    </body
+<body>
+  <img src="${pageContext.request.contextPath}/res/images/item/miaosha.png" style="height:250px;width:1300px;" >
+  </body>
 <div class="banner_do">
 <div class="banner_main">
     <div class="banner_goods">

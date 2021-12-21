@@ -7,7 +7,6 @@ import java.util.Locale;
 /**
  * 订单组类
  * @implNote 该类用于辅助后台图表的生成，亦不属于实体类
- * @author 贤趣项目小组
  */
 public class OrderGroup {
     private Date productOrder_pay_date/*订单组的支付日期*/;

@@ -2,7 +2,6 @@ package com.xq.tmall.entity;
 
 /**
  * 地址实体类
- * @author 贤趣项目小组
  */
 public class Address {
     private String address_areaId/*地址ID*/;

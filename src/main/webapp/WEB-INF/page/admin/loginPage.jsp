@@ -43,10 +43,5 @@
             </form>
         </div>
     </div>
-    <div id="div_foot">
-        <span>© 2020 XQ Team <a href="https://license.coscl.org.cn/MulanPSL/" target="_blank">Mulan PSL v1</a></span>
-        <span> ⋅ </span>
-        <a href="http://www.beian.miit.gov.cn" target="_blank">陕ICP备19018406号</a>
-    </div>
 </div>
 </body>

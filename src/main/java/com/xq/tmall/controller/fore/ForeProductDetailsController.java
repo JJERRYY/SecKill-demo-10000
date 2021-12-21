@@ -23,7 +23,6 @@ import org.springframework.ui.Model;
 
 /**
  * 产品详情页
- * @author 贤趣项目小组
  */
 @Controller
 public class ForeProductDetailsController extends BaseController {

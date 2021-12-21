@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 /**
  * 订单列表页
- * @author 贤趣项目小组
  */
 @Controller
 public class ForeOrderController extends BaseController {

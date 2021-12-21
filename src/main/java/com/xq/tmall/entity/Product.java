@@ -10,7 +10,6 @@ import java.util.Locale;
 
 /**
  * 产品实体类
- * @author 贤趣项目小组
  */
 public class Product implements Serializable {
     private Integer product_id/*产品ID*/;

@@ -25,7 +25,6 @@ import java.util.Map;
 
 /**
  * 主页
- * @author 贤趣项目小组
  */
 @Controller
 public class ForeHomeController extends BaseController {

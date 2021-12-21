@@ -20,7 +20,6 @@ import java.util.Map;
 
 /**
  * 登陆页
- * @author 贤趣项目小组
  */
 @Controller
 public class ForeLoginController extends BaseController {

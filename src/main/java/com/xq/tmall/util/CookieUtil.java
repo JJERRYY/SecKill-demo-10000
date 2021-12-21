@@ -7,13 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * github: https://github.com/hfbin
- * Created by: HuangFuBin
- * Date: 2018/5/5
- * Time: 13:32
- * Such description:
- */
+
 @Slf4j
 public class CookieUtil {
     private final static String COOKIE_DOMAIN = "localhost";

@@ -12,7 +12,7 @@
     <div class="header">
         <a href="${pageContext.request.contextPath}"><img
                 src="${pageContext.request.contextPath}/res/images/fore/WebsiteImage/tmallLogoB.png"></a>
-        <span class="shopNameHeader">贤趣${requestScope.product.product_category.category_name}官方旗舰店</span>
+        <span class="shopNameHeader">${requestScope.product.product_category.category_name}官方旗舰店</span>
         <input id="tid" type="hidden" value="${requestScope.product.product_category.category_id}"/>
         <img src="${pageContext.request.contextPath}/res/images/fore/WebsiteImage/detailsHeaderA.png"
              class="shopAssessHeader">
@@ -242,8 +242,8 @@
                     });
                 });
             </script>
-            <form method="get" class="context_buy_form">
-                <input class="context_buyNow" type='submit' id="submitId" value="立即秒杀"/>
+            <form method="get" class="context_buy_form" name="miaosha">
+                <input class="context_buyNow" type='submit' id="submitId" value="立即秒杀" name="agree1"/>
 
             </form>
             <form method="get" class="context_buyCar_form">
@@ -325,6 +325,7 @@
         var submitId = document.getElementById('submitId');
         submitId.disabled = true;
         if(remainSeconds > 0){
+          document.miaosha.agree1.value = "秒杀即将开始:" + remainSeconds+"s";
             submitId.disabled = true;
             timeout = setTimeout(function (){
                 $("#countDown").text(remainSeconds - 1);
@@ -332,12 +333,15 @@
                 countDown();
             },1000);
         }else if(remainSeconds == 0  ){
+        document.miaosha.agree1.value = "立即秒杀";
                      submitId.disabled = false;
                      if(timeout){
                          clearTimeout(timeout);
                      }
                      $("#skillTip").html("正在秒杀中");
+
          }else{
+         document.miaosha.agree1.value = "秒杀结束";
         submitId.disabled = true;
         $("#skillTip").html("秒杀已经结束");
         }

@@ -2,7 +2,6 @@ package com.xq.tmall.entity;
 
 /**
  * 产品图片实体类
- * @author 贤趣项目小组
  */
 public class ProductImage {
     private Integer productImage_id/*产品图片ID*/;
